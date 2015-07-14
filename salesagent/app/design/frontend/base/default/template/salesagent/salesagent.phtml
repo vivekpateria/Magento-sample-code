@@ -1,0 +1,114 @@
+<?php
+/**
+ * @category    design
+ * @package     default_default
+ * Create salesagent registration form template
+ * @var $this Alw_Salesagent_Block_Salesagent
+ **/
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="account-create">
+    <div class="page-title">
+         <h1><?php echo $this->__('Create an Account') ?></h1>
+    </div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml();
+        $post=Mage::getSingleton('core/session')->getPostValue();
+        if ($post) {
+            $userName = $post['user_name'];
+            $email = $post['email'];
+            $firstName = $post['first_name'];
+            $lastName = $post['last_name'];
+        } else {
+            $userName = '' ;
+            $email = '';
+            $firstName = '';
+            $lastName = '';
+        }
+        Mage::getSingleton('core/session')->setPostValue('');
+    ?>
+    <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate">
+        <div class="fieldset"><input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
+            <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
+            <h2 class="legend"><?php echo $this->__('Personal Information') ?></h2>
+            <ul class="form-list">
+               <li class="fields">
+                   <div class="field"><label for="user_name" class="required"><?php echo $this->__('User Name') ?><em>*</em></label>
+                       <div class="input-box">
+                           <input type="text" name="user_name" id="user_name" value="<?php echo $userName;?>" title="<?php echo $this->__('User Name') ?>" maxlength="20" class="input-text required-entry validate-alphanumber validate-length maximum-length-20" />
+                       </div>
+                   </div>
+                    <div class="field"><label for="email_address" class="required"><?php echo $this->__('Email Address') ?><em>*</em></label>
+                        <div class="input-box salesagent"><input type="text" name="email" id="email_address" value="<?php echo $email;?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry " /> <span class="help_text"><?php /*echo $this->__('(john@gmail.com)')*/ ?></span>
+                        </div>
+                    </div>
+               </li>
+                <li>
+                    <div class="field"><label for="first_name" class="required"><?php echo $this->__('First Name') ?><em>*</em></label>
+                        <div class="input-box">
+                             <input type="text" name="first_name" id="first_name" value="<?php echo $firstName;?>" maxlength="20" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry validate-name validate-length maximum-length-20" />
+                        </div>
+                    </div>
+                    <div class="field"><label for="last_name" class="required"><?php echo $this->__('Last Name') ?><em>*</em></label>
+                        <div class="input-box">
+                              <input type="text" name="last_name" id="last_name" value="<?php echo $lastName;?>" title="<?php echo $this->__('Last Name') ?>" maxlength="20" class="input-text required-entry validate-name validate-length maximum-length-20" /> 
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="fieldset">
+          <h2 class="legend"><?php echo $this->__('Login Information') ?></h2>
+            <ul class="form-list">
+                <li class="fields">
+                    <div class="field salesagent"><label for="password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
+                        <div class="input-box">
+                              <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-paslength validate-adminpas" maxlength="20" />
+                        </div>
+                        </div>
+                    <div class="field"><label for="confirmation" class="required"><em>*</em><?php echo $this->__('Confirm Password') ?></label>
+                        <div class="input-box">
+                              <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword" maxlength="20" />
+                        </div>
+                    </div>
+                </li>
+                <?php echo $this->getChildHtml('form.additional.info'); ?>
+            </ul>
+        </div>
+        <div class="buttons-set account-submit">
+              <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+              <button  type="submit" title="<?php echo $this->__('Submit') ?>" class="button"><span><span><?php echo $this->__('Submit') ?></span></span></button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+    var salesagentForm = new VarienForm('form-validate', true);
+//]]>
+    /* Function to add validation in name field to only accept alphabets*/
+    Validation.add('validate-name','Please enter valid name',function(the_field_value){
+            if (!(/^[a-zA-Z]+(([\'\,\.\- ][a-zA-Z ])?[a-zA-Z]*)*$/.test(the_field_value))) {
+                return false;
+            }
+            return true;
+        });
+    /* Function to add validation in password field to only accept alphabets and numbers*/
+    Validation.add('validate-adminpas','Password should contain both numeric and alphabetic characters. Spaces and other characters are not allowed.',function(pass){
+            if((/^(([0-9]+[a-zA-Z]+)+[0-9]*)+$/.test(pass)) || (/^(([a-zA-Z]+[0-9]+)+[a-zA-Z]*)+$/.test(pass))) {
+                return true;
+            }
+            return false;
+        });
+    /* Function to add validation in password field to validate lenght*/
+    Validation.add('validate-paslength','Please enter 7 or more characters',function(pass){
+            return !(pass.length < 7);
+        });
+
+    /* Function to add validation in user name */
+    Validation.add("validate-alphanumber","Please use only letters (a-z or A-Z) or numbers (0-9) in this field. Spaces and other characters are not allowed.",function(checkboxElem){
+        if (!(/^[a-zA-Z0-9]+$/.test(checkboxElem))) {
+            return false;
+        }
+        return true;
+    });
+</script>

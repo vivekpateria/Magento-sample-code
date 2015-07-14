@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Alw_Salesagent>
+            <version>6.0.0</version>
+        </Alw_Salesagent>
+    </modules>    
+    <routers>
+         <adminhtml>
+            <args>
+               <modules>
+                  <Alw_Salesagent_Adminhtml before="Mage_Adminhtml">Alw_Salesagent_Adminhtml</Alw_Salesagent_Adminhtml>
+               </modules>
+            </args>
+         </adminhtml>
+      </routers>
+    <global>      
+        <blocks>
+            <salesagent>
+                <class>Alw_Salesagent_Block</class>
+            </salesagent>
+			<adminhtml>
+                <rewrite>
+                    <customer_grid>Alw_Salesagent_Block_Adminhtml_Customer_Grid</customer_grid>                   
+                </rewrite>            
+			</adminhtml>
+        </blocks>       
+        
+        <helpers>
+            <salesagent>
+                <class>Alw_Salesagent_Helper</class>
+            </salesagent>
+        </helpers>
+         <events>
+           <sales_order_save_after>
+                <observers>
+                    <alw_salesagent_observer_sales_order_completeclosed_after>
+                        <type>singleton</type>
+                        <class>salesagent/observer</class>
+                        <method>salesOrderCompleteClosedAfter</method>
+                    </alw_salesagent_observer_sales_order_completeclosed_after>
+                </observers>
+            </sales_order_save_after>
+         </events>
+    </global> 
+    
+    <frontend>
+        <routers>
+            <salesagent>
+                <use>standard</use>
+                <args>
+                    <module>Alw_Salesagent</module>
+                    <frontName>salesagent</frontName>
+                </args>
+            </salesagent>
+        </routers>
+        <layout>
+            <updates>
+                <salesagent module="Alw_Salesagent">
+                    <file>salesagent.xml</file>
+                </salesagent>
+            </updates>
+        </layout>    
+    </frontend>     
+</config>
